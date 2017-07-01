@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="style.css">
+        <title></title>
+      </head>
+      <body>
+
+        <h1>Mystery Word Game</h1>
+
+        <h2>Guesses remaining:</h2>
+
+        <div class="guesses">
+          {{#guess}}
+            <div class="guess"></div>
+          {{/guess}}
+        </div>
+        <h2>Mystery Word:</h2>
+        <div class="word">
+          {{#word}}
+            <div class="letter"></div>
+          {{/word}}
+        </div>
+
+        <form action="/guess" method="post">
+          Please guess a letter: <input type="text" name="guess" id="guess"></input>
+          <button type="submit" value="">?</button>
+        </form>
+        <form action="/quit" method="post">
+          <button type="submit" value="Submit">Quit</button>
+        </form>
+
+        Message: {{message}}
+
+      </body>
+    </html>
+
+  </body>
+</html>
