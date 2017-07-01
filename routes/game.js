@@ -11,11 +11,15 @@ let word //the mysteryword
 let guesses
 let hiddenWord //the blanks that will reveal if a guess is a match
 let inGame = [true] //to hide the guess form when game is over
+//let winMessage //will stay undefined until a win
 
 /*Remembers the MysteryWord, number of guesses remaining */
 const updateState = function(request) {
   request.session.mysteryWord = word
   request.session.guesses = guesses
+  request.session.hiddenWord = hiddenWord
+  request.session.inGame = inGame
+  request.session.message = message
 }
 
 
@@ -59,7 +63,7 @@ let error = false
 let message = ""
 
 router.post('/guess', function(req, res){
-
+  
   if (guesses.length > 1) {
     req.checkBody("guess", 'Dont forget to guess a letter!').notEmpty()
     error = req.validationErrors()
@@ -88,29 +92,46 @@ router.post('/guess', function(req, res){
         message = req.body.guess + " has already been guessed!"
         return res.render('game', {guesses: guesses, game: inGame, word: hiddenWord, message: message})
       } else {
-        if (status.checkLetter(req.body.guess, word)){
-            //if correct guess do something
+          if (!status.checkLetter(req.body.guess, word)){
+            //if wrong guess do something else
+            message = req.body.guess + " is not in the word."
+            return res.render('game', {guesses: status.wrongGuess, game: inGame, word: hiddenWord, message: message})
+          } else if (status.checkLetter(req.body.guess, word)) {
+              //win check
+
+          //    if (!status.winCheck(hiddenWord)) {
+                message = req.body.guess + " was found in the word!"
+                status.rightGuess(req.body.guess, word, hiddenWord)
+                 // need to return modified hidden word
+                 if (status.winCheck(hiddenWord)) {
+                   message = "Congratulations!"
+                   inGame = false
+                   updateState(req)
+                   status.guesses = guesses
+                   //hiddenWord = word
+                   return res.render('game', {word: hiddenWord, again: inGame, message: message})
+                 }
+                return res.render('game', {guesses: guesses, game: inGame, word: hiddenWord, message: message})
+            //  }
 
 
-        } else {
-        //  status.wrongGuess
-          //if wrong guess do something else
-          message = req.body.guess + " is not in the word."
-          return res.render('game', {guesses: status.wrongGuess, game: inGame, word: hiddenWord, message: message})
+
+            }
         }
-
-      }
-
     }
-    guesses = status.guesses
+    //guesses = status.guesses
     return res.render('game', {guesses: guesses, game: inGame, word: hiddenWord, message: message})
     updateState(req)
   }
+
+
   //if guesses left = 0, game over
   message = "Sorry, you lose."
-  inGame = [false]
+  inGame = false
   hiddenWord = word
-  return res.render('game', {word: hiddenWord, message: message})
+  status.guesses = guesses
+  updateState(req)
+  return res.render('game', {word: hiddenWord, game: inGame, message: message})
 })
 
 

@@ -42,9 +42,11 @@
 
         <div class="message"> {{message}} </div><br>
 
-        <form action="/quit" method="post">
-          <button type="submit" value="Submit">Quit</button>
+        {{^game}}
+        <form action="/again" method="post">
+          <button type="submit" value="Submit">Play Again</button>
         </form>
+        {{/game}}
 
       </body>
     </html>

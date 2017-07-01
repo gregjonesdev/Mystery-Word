@@ -28,10 +28,12 @@ const newGuess = function(letter){
 const checkLetter = function (letter, mysteryWord) {
   //if mystery word contains that letter, display it and return true
   console.log("Does " + mysteryWord + " contain the letter " + letter + "?")
-  if (mysteryWord.indexOf(letter)==-1) {
+  if (mysteryWord.indexOf(letter.toLowerCase())==-1) {
     console.log("No!")
+    return false
   }
   else console.log ("yes!")
+  return true
 
   // else pop a guess from guesses and return false
 }
@@ -39,6 +41,24 @@ const checkLetter = function (letter, mysteryWord) {
 const wrongGuess = function(){
   guesses.pop()
   return guesses
+}
+
+const rightGuess = function(letter, mysteryWord, hiddenWord) {
+
+  for (i=0; i<mysteryWord.length; i++) {
+    if (mysteryWord[i]==letter.toLowerCase()){
+      hiddenWord[i] = letter.toLowerCase()
+    }
+  }
+
+}
+
+const winCheck = function (hiddenWord) {
+  for (i=0; i<hiddenWord.length; i++) {
+    if (hiddenWord[i]=="") {
+      return false
+    }
+  } return true;
 }
 
 
@@ -50,4 +70,6 @@ newHidden: newHidden,
 hiddenWord: hiddenWord,
 newGuess: newGuess,
 wrongGuess: wrongGuess,
+rightGuess: rightGuess,
+winCheck: winCheck
 }
