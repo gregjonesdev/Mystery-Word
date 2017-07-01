@@ -18,7 +18,7 @@
         <h1>Mystery Word:</h1>
         <div class="word">
           {{#word}}
-            <div class="letter"></div>
+            <div class="letter">{{.}}</div>
           {{/word}}
         </div><br>
 
@@ -30,14 +30,15 @@
           {{/guesses}}
         </div><br>
 
+        {{#game}}
         <h2>Please guess a letter: </h2>
-        <form action="/guess" method="post">
+        <form action="/guess" method="post" name="guesser">
 
           <div class= "guessEntry"><input type="text" name="guess" id="guess"></input>
           <span><button type="submit" id="guessButton" value="">?</button></span>
           </div>
         </form><br>
-
+        {{/game}}
 
         <div class="message"> {{message}} </div><br>
 

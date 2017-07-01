@@ -36,6 +36,11 @@ const checkLetter = function (letter, mysteryWord) {
   // else pop a guess from guesses and return false
 }
 
+const wrongGuess = function(){
+  guesses.pop()
+  return guesses
+}
+
 
 module.exports = {
 guesses: guesses, //number of guesses remaining
@@ -43,9 +48,6 @@ lettersGuessed: lettersGuessed,
 checkLetter: checkLetter,
 newHidden: newHidden,
 hiddenWord: hiddenWord,
-newGuess: newGuess
-// this will be a function to call when the user guesses a letter. It needs to:
-//       1. check if the letter has already been guessed
-//       2. check if the letter is contained in the mysteryword
-//       3.
+newGuess: newGuess,
+wrongGuess: wrongGuess,
 }

@@ -10,6 +10,7 @@ const mysteryWord = require('../models/words.js')
 let word //the mysteryword
 let guesses
 let hiddenWord //the blanks that will reveal if a guess is a match
+let inGame = [true] //to hide the guess form when game is over
 
 /*Remembers the MysteryWord, number of guesses remaining */
 const updateState = function(request) {
@@ -48,7 +49,7 @@ router.use(function(req, res, next){
 
 router.get('*', function(req, res){
   console.log("Router checkpoint 4: ")
-  res.render('game', {guesses: guesses, word: hiddenWord})
+  res.render('game', {guesses: guesses, game: inGame, word: hiddenWord})
 
 })
 
@@ -58,44 +59,58 @@ let error = false
 let message = ""
 
 router.post('/guess', function(req, res){
-  req.checkBody("guess", 'Dont forget to guess a letter!').notEmpty()
-  error = req.validationErrors()
 
-  if (!error) {
-    req.checkBody("guess", 'Please enter one character at a time').len(0,1)
+  if (guesses.length > 1) {
+    req.checkBody("guess", 'Dont forget to guess a letter!').notEmpty()
     error = req.validationErrors()
-  }
 
-  if (!error) {
-    req.checkBody("guess", 'Please enter letters only!').isAlpha()
-    error = req.validationErrors()
-  }
-
-  if (error) {
-    return res.render('game', {guesses: guesses, word: hiddenWord, message: error[0].msg})
- }
-
-/* if error is still false, enter this as a guess*/
-  if(!error) {
-    console.log("req.body.guess: " + req.body.guess)
-    console.log("Ok, that looks like a good guess")
-
-
-    if (!status.newGuess(req.body.guess)) {
-      message = req.body.guess + " has already been guessed!"
-      return res.render('game', {guesses: guesses, word: hiddenWord, message: message})
-    } else {
-      status.checkLetter(req.body.guess, word) //checks if guess is in word
+    if (!error) {
+      req.checkBody("guess", 'Please enter one character at a time').len(0,1)
+      error = req.validationErrors()
     }
-      
+
+    if (!error) {
+      req.checkBody("guess", 'Please enter letters only!').isAlpha()
+      error = req.validationErrors()
+    }
+
+    if (error) {
+      return res.render('game', {guesses: guesses, game: inGame, word: hiddenWord, message: error[0].msg})
+   }
+
+   /* if error is still false, enter this as a guess*/
+    if(!error) {
+      console.log("req.body.guess: " + req.body.guess)
+      console.log("Ok, that looks like a good guess")
+
+
+      if (!status.newGuess(req.body.guess)) {
+        message = req.body.guess + " has already been guessed!"
+        return res.render('game', {guesses: guesses, game: inGame, word: hiddenWord, message: message})
+      } else {
+        if (status.checkLetter(req.body.guess, word)){
+            //if correct guess do something
+
+
+        } else {
+        //  status.wrongGuess
+          //if wrong guess do something else
+          message = req.body.guess + " is not in the word."
+          return res.render('game', {guesses: status.wrongGuess, game: inGame, word: hiddenWord, message: message})
+        }
+
+      }
+
+    }
+    guesses = status.guesses
+    return res.render('game', {guesses: guesses, game: inGame, word: hiddenWord, message: message})
+    updateState(req)
   }
-
-
-
-
-
-guesses = status.guesses
-updateState(req)
+  //if guesses left = 0, game over
+  message = "Sorry, you lose."
+  inGame = [false]
+  hiddenWord = word
+  return res.render('game', {word: hiddenWord, message: message})
 })
 
 
