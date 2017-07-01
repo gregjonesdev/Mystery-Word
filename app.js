@@ -32,6 +32,8 @@ app.use(session({
 
 app.get('/', function(req, res) {
 app.use('/game', gameRouter)
+app.post('/guess', gameRouter)
+app.post('/quit', gameRouter)
 
 console.log("Router checkpoint 1: " + req.params)
 console.log("session secret: " + req.session.secret)
@@ -57,7 +59,11 @@ app.post('/launch', function (req, res){
 
 
 
-
+// app.post('/guess', function(req, res){
+//   //console.log("req.body.guess: " + req.body.guess)
+//   //res.render('game', {guesses: guesses, word: word})
+//   res.send("hello")
+// })
 
 
 

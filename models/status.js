@@ -1,30 +1,41 @@
+let guesses = ["guess", "guess","guess","guess","guess","guess","guess","guess"]
 
-const gameCheck = function(){
-  return "ok, this works"
+const soloCheck = function(letter) {
+  if (letter.length === 1) {
+    return true;
+  }
+  return false;
 }
 
-let guessesLeft = 8;
-
-const makeAGuess = function(){
-  return "make a guess function"
+const letterCheck = function (letter) {
+  if (alphabet.indexof(letter.toLowerCase())!= -1) {
+    return true;
+  }
+  return false;
 }
 
-let guessNumber= [true,true,true,true,true,true,true,true]
 
+//const previouslyGuessed
+
+
+
+
+const evaluateGuess = function(letter){
+
+
+
+}
+
+const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 module.exports = {
-//check: gameCheck
-check: "hi from status.js",
-guesses: guessNumber, //number of guesses remaining
+guesses: guesses, //number of guesses remaining
 lettersGuessed: [],
-guess: makeAGuess
+//guess: guess,
+//singleLetterCheck: singleLetterCheck,
+//evaluateGuess: evaluateGuess
 // this will be a function to call when the user guesses a letter. It needs to:
 //       1. check if the letter has already been guessed
 //       2. check if the letter is contained in the mysteryword
 //       3.
 }
-
-
-
-//
-// let lettersGuessed = []

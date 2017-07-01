@@ -1,16 +1,26 @@
 const express = require ('express')
-const router = express.Router()
+const router = express()
+const bodyParser = require('body-parser')
+const expressValidator = require('express-validator')
+
 const status = require('../models/status.js')
 const mysteryWord = require('../models/words.js')
+
 
 let word
 let guesses
 
+/*Note request here is just a paramater */
 const updateState = function(request) {
   request.session.mysteryWord = word
   request.session.guesses = guesses
 }
 
+
+//router.use(bodyParser.json())
+router.use(bodyParser.urlencoded({extended:false}))
+
+router.use(expressValidator());
 
 router.use(function(req, res, next){
   // console.log("Router checkpoint 3: " + req.params)
@@ -33,7 +43,7 @@ router.use(function(req, res, next){
   next()
 })
 
-router.all('*', function(req, res){
+router.get('*', function(req, res){
   console.log("Router checkpoint 4: ")
   res.render('game', {guesses: guesses, word: word})
 
@@ -43,6 +53,19 @@ router.all('*', function(req, res){
 
 router.post('/guess', function(req, res){
 
+  console.log("req.body.guess: " + req.body.guess)
+  //req.checkBody(req.body.guess, 'Dont forget to guess a letter!').notEmpty()
+
+
+  //console.log("Caught Error: " + req.validationErrors)
+
+
+  // res.render('game', {guesses: guesses, word: word})
+  //
+  // console.log("initial: " + status.lettersGuessed)
+  // status.lettersGuessed.push("A") THIS WORKS!
+  // console.log("after push: " + status.lettersGuessed)
+  //res.send("hello to the max")
 })
 
 
