@@ -10,7 +10,7 @@ const mysteryWord = require('../models/words.js')
 let word
 let guesses
 
-/*Note request here is just a paramater */
+/*Remembers the MysteryWord, number of guesses remaining */
 const updateState = function(request) {
   request.session.mysteryWord = word
   request.session.guesses = guesses
@@ -52,11 +52,9 @@ router.get('*', function(req, res){
 /* What will happen if user does a post/guess? */
 
 let error = false
+let message = ""
 
 router.post('/guess', function(req, res){
-
-
-
   req.checkBody("guess", 'Dont forget to guess a letter!').notEmpty()
   error = req.validationErrors()
 
@@ -76,16 +74,23 @@ router.post('/guess', function(req, res){
 
 /* if error is still false, enter this as a guess*/
  if(!error) {
+   console.log("req.body.guess: " + req.body.guess)
    console.log("Ok, that looks like a good guess")
 
+   //status.newGuess(req.body.guess)
+   if (!status.newGuess(req.body.guess)) {
+     message = req.body.guess + " has already been guessed!"
+   return res.render('game', {guesses: guesses, word: word, message: message})
  }
-  // res.render('game', {guesses: guesses, word: word})
-  //
-  // console.log("initial: " + status.lettersGuessed)
-  // status.lettersGuessed.push("A") THIS WORKS!
-  // console.log("after push: " + status.lettersGuessed)
-  //res.render('game', {guesses: guesses, word: word, message: error})
-  //res.send(req.validationErrors())
+    // returns false if already guessed
+ }
+
+
+
+
+
+
+
 })
 
 
