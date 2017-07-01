@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.15.3",
+    "express-session": "^1.15.3",
     "mustache": "^2.3.0",
     "mustache-express": "^1.2.5"
   }
