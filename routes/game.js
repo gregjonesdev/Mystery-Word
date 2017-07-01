@@ -7,8 +7,9 @@ const status = require('../models/status.js')
 const mysteryWord = require('../models/words.js')
 
 
-let word
+let word //the mysteryword
 let guesses
+let hiddenWord //the blanks that will reveal if a guess is a match
 
 /*Remembers the MysteryWord, number of guesses remaining */
 const updateState = function(request) {
@@ -36,6 +37,8 @@ router.use(function(req, res, next){
   word = mysteryWord.new
   console.log(word + " just assigned as mystery word")
   guesses = status.guesses
+  hiddenWord = status.newHidden(word) //takes mystery word, creates an array of empty strings with same length
+  console.log("new hidden word: " + hiddenWord)
   updateState(req)
   //req.session.mysteryWord = word
   //req.session.guesses = guesses
@@ -45,7 +48,7 @@ router.use(function(req, res, next){
 
 router.get('*', function(req, res){
   console.log("Router checkpoint 4: ")
-  res.render('game', {guesses: guesses, word: word})
+  res.render('game', {guesses: guesses, word: hiddenWord})
 
 })
 
@@ -69,28 +72,30 @@ router.post('/guess', function(req, res){
   }
 
   if (error) {
-    return res.render('game', {guesses: guesses, word: word, message: error[0].msg})
+    return res.render('game', {guesses: guesses, word: hiddenWord, message: error[0].msg})
  }
 
 /* if error is still false, enter this as a guess*/
- if(!error) {
-   console.log("req.body.guess: " + req.body.guess)
-   console.log("Ok, that looks like a good guess")
-
-   //status.newGuess(req.body.guess)
-   if (!status.newGuess(req.body.guess)) {
-     message = req.body.guess + " has already been guessed!"
-   return res.render('game', {guesses: guesses, word: word, message: message})
- }
-    // returns false if already guessed
- }
+  if(!error) {
+    console.log("req.body.guess: " + req.body.guess)
+    console.log("Ok, that looks like a good guess")
 
 
-
-
+    if (!status.newGuess(req.body.guess)) {
+      message = req.body.guess + " has already been guessed!"
+      return res.render('game', {guesses: guesses, word: hiddenWord, message: message})
+    } else {
+      status.checkLetter(req.body.guess, word) //checks if guess is in word
+    }
+      
+  }
 
 
 
+
+
+guesses = status.guesses
+updateState(req)
 })
 
 
