@@ -30,10 +30,12 @@
           {{/guesses}}
         </div><br>
 
-
+        <h2>Please guess a letter: </h2>
         <form action="/guess" method="post">
-          <div class= "guessEntry">Please guess a letter: <input type="text" name="guess" id="guess"></input>
-          <button type="submit" id="guessButton" value="">?</button></div>
+
+          <div class= "guessEntry"><input type="text" name="guess" id="guess"></input>
+          <span><button type="submit" id="guessButton" value="">?</button></span>
+          </div>
         </form><br>
 
 

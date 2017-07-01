@@ -36,15 +36,31 @@ h2 {
 }
 
 .guessEntry {
-  font-size: 1.5em;
-  height: 1.5em;
-  border: 1px solid red;
-
-
+  //border: 1px solid red;
+  height: 40px;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
   align-content: center;
-
+  justify-content: flex-start;
+  padding: 0;
 }
 
+#guess {
+  height: 30px;
+  font-size: 2em;
+  width: 100px;
+  margin: 1px;
+}
+
+
+#guessButton {
+  width: 50px;
+  height: 30px;
+  margin-left: 5px;
+  border-radius: 3px;
+  font-size: 1.5em;
+}
 
 .gone {
   background-color: white;
@@ -58,13 +74,11 @@ h2 {
   justify-content: center;
 }
 
-#guessButton {
-  width: 50px;
-  height: 1.5em;
-}
 
 #startButton {
-  width: 100px;
+  width: 150px;
 
   height: 65px;
+  border-radius: 3px;
+  font-size: 1.5em;
 }

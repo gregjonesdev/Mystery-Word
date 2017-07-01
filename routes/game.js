@@ -51,22 +51,42 @@ router.get('*', function(req, res){
 
 /* What will happen if user does a post/guess? */
 
+let error = false
+
 router.post('/guess', function(req, res){
 
-  console.log("req.body.guess: " + req.body.guess)
-  req.checkBody(req.body.guess, 'Dont forget to guess a letter!').notEmpty()
-  console.log(req.validationErrors()[0].msg)
 
 
+  req.checkBody("guess", 'Dont forget to guess a letter!').notEmpty()
+  error = req.validationErrors()
+
+  if (!error) {
+    req.checkBody("guess", 'Please enter one character at a time').len(0,1)
+    error = req.validationErrors()
+  }
+
+  if (!error) {
+    req.checkBody("guess", 'Please enter letters only!').isAlpha()
+    error = req.validationErrors()
+  }
+
+  if (error) {
+    return res.render('game', {guesses: guesses, word: word, message: error[0].msg})
+ }
+
+/* if error is still false, enter this as a guess*/
+ if(!error) {
+   console.log("Ok, that looks like a good guess")
+
+ }
   // res.render('game', {guesses: guesses, word: word})
   //
   // console.log("initial: " + status.lettersGuessed)
   // status.lettersGuessed.push("A") THIS WORKS!
   // console.log("after push: " + status.lettersGuessed)
-  res.render('game', {guesses: guesses, word: word, message: req.validationErrors()[0].msg})
+  //res.render('game', {guesses: guesses, word: word, message: error})
   //res.send(req.validationErrors())
 })
-
 
 
 
