@@ -1,0 +1,36 @@
+.letter {
+  height: 50px;
+  width: 10%;
+  max-width: 50px;
+  border: 1px solid black;
+  margin: 1%;
+}
+
+.guesses {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.guess {
+  height: 30px;
+  width: 7%;
+  background-color: green;
+  border: 2px solid green;
+  margin: 1%;
+}
+
+.gone {
+  background-color: white;
+
+}
+
+.word {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+}
+
+#guessButton {
+  width: 50px;
+}

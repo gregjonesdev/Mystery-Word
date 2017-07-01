@@ -21,8 +21,8 @@ app.use(session({
   saveUninitialized: true,
   mysteryWord: undefined,
   guesses: undefined,
-  lettersGuessed: undefined,
-  guess: undefined
+  lettersGuessed: undefined
+  //guess: undefined
 }))
 
 
