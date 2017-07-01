@@ -14,7 +14,13 @@
       </head>
       <body>
 
-        <h1>Mystery Word Game</h1>
+        <!-- <h1>Mystery Word Game</h1> -->
+        <h1>Mystery Word:</h1>
+        <div class="word">
+          {{#word}}
+            <div class="letter"></div>
+          {{/word}}
+        </div><br>
 
         <h2>Guesses remaining:</h2>
 
@@ -22,23 +28,20 @@
           {{#guesses}}
             <div class="guess"></div>
           {{/guesses}}
-        </div>
-        <h2>Mystery Word:</h2>
-        <div class="word">
-          {{#word}}
-            <div class="letter"></div>
-          {{/word}}
-        </div>
+        </div><br>
+
 
         <form action="/guess" method="post">
-          Please guess a letter: <input type="text" name="guess" id="guess"></input>
-          <button type="submit" id="guessButton" value="">?</button>
-        </form>
+          <div class= "guessEntry">Please guess a letter: <input type="text" name="guess" id="guess"></input>
+          <button type="submit" id="guessButton" value="">?</button></div>
+        </form><br>
+
+
+        <div class="message"> {{message}} </div><br>
+
         <form action="/quit" method="post">
           <button type="submit" value="Submit">Quit</button>
         </form>
-
-        Message: {{message}}
 
       </body>
     </html>

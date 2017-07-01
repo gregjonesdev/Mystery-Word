@@ -17,7 +17,7 @@ const updateState = function(request) {
 }
 
 
-//router.use(bodyParser.json())
+router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({extended:false}))
 
 router.use(expressValidator());
@@ -54,10 +54,8 @@ router.get('*', function(req, res){
 router.post('/guess', function(req, res){
 
   console.log("req.body.guess: " + req.body.guess)
-  //req.checkBody(req.body.guess, 'Dont forget to guess a letter!').notEmpty()
-
-
-  //console.log("Caught Error: " + req.validationErrors)
+  req.checkBody(req.body.guess, 'Dont forget to guess a letter!').notEmpty()
+  console.log(req.validationErrors()[0].msg)
 
 
   // res.render('game', {guesses: guesses, word: word})
@@ -65,7 +63,8 @@ router.post('/guess', function(req, res){
   // console.log("initial: " + status.lettersGuessed)
   // status.lettersGuessed.push("A") THIS WORKS!
   // console.log("after push: " + status.lettersGuessed)
-  //res.send("hello to the max")
+  res.render('game', {guesses: guesses, word: word, message: req.validationErrors()[0].msg})
+  //res.send(req.validationErrors())
 })
 
 
