@@ -6,18 +6,11 @@ const expressValidator = require('express-validator')
 const status = require('../models/status.js')
 const mysteryWord = require('../models/words.js')
 
-//const fs = require('fs')
-
-
-//const allWords = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n")
-
-
 let word //the mysteryword
 let guesses
 let lettersGuessed
 let hiddenWord //the blanks that will reveal if a guess is a match
 let inGame = [true] //to hide the guess form when game is over
-//let winMessage //will stay undefined until a win
 
 /*Remembers the MysteryWord, number of guesses remaining */
 const updateState = function(request) {
@@ -36,42 +29,23 @@ router.use(bodyParser.urlencoded({extended:false}))
 router.use(expressValidator());
 
 router.use(function(req, res, next){
-  // console.log("Router checkpoint 3: " + req.params)
-  // console.log("middleware to authenticate the player")
-  // check authentication here. if none, redirect to welcome
-  // console.log("session secret from game router: " + req.session.secret)
   if (!req.session.secret) {
     return res.render('welcome')
   }
 
-  /* At this point, assign a mystery word to guess */
   if (!word) {
     let i = Math.floor(Math.random() * mysteryWord.length)
-    console.log("rand number 1 : " + i)
-
     word = mysteryWord.new(i)
-    console.log(word + " just assigned as mystery word")
     hiddenWord = status.newHidden(word) //try add in this and the next line
-    console.log("new hidden word: " + hiddenWord)
   }
   guesses = status.guesses
-  //hiddenWord = status.newHidden(word) //takes mystery word, creates an array of empty strings with same length
-  console.log("new hidden word: " + hiddenWord)
   updateState(req)
-  //req.session.mysteryWord = word
-  //req.session.guesses = guesses
-  console.log("req.session.mysteryWord: " + req.session.mysteryWord)
   next()
 })
 
 router.get('*', function(req, res){
-  console.log("Router checkpoint 4: ")
   res.render('game', {guesses: guesses, game: inGame, word: hiddenWord})
-
 })
-
-/* What will happen if user does a post/guess? */
-
 let error = false
 let message = ""
 
@@ -97,18 +71,23 @@ router.post('/guess', function(req, res){
 
    /* if error is still false, enter this as a guess*/
     if(!error) {
-      console.log("req.body.guess: " + req.body.guess)
-      console.log("Ok, that looks like a good guess")
-
-
       if (!status.newGuess(req.body.guess)) {
         message = req.body.guess + " has already been guessed!"
+        //console.log("76 guesses: " + guesses.length)
+        console.log("77 status.guesses " + status.guesses.length)
         return res.render('game', {guesses: guesses, game: inGame, word: hiddenWord, message: message})
       } else {
           if (!status.checkLetter(req.body.guess, word)){
             //if wrong guess do something else
             message = req.body.guess + " is not in the word."
-            return res.render('game', {guesses: status.wrongGuess, game: inGame, word: hiddenWord, message: message})
+            //console.log("Guesses: " + status.guesses.length)
+            //status.wrongGuess
+            status.guesses.pop()
+            console.log(guesses.length)
+            console.log("86 guesses: " + status.guesses.length)
+            //console.log("87 status.guesses " + status.guesses.length)
+            return res.render('game', {guesses: guesses, game: inGame, word: hiddenWord, message: message})
+
           } else if (status.checkLetter(req.body.guess, word)) {
               //win check
 
@@ -119,26 +98,24 @@ router.post('/guess', function(req, res){
                  if (status.winCheck(hiddenWord)) {
                    message = "Congratulations!"
                    inGame = false
+                   //console.log("99 guesses: " + guesses.length)
+                   console.log("100 status.guesses " + status.guesses.length)
                    updateState(req)
-                   status.guesses = guesses
-                   //hiddenWord = word
+                   //console.log("102 guesses: " + guesses.length)
+                   console.log("103 status.guesses " + status.guesses.length)
+                   guesses = status.guesses
                    return res.render('game', {word: hiddenWord, again: inGame, message: message})
                  }
+                 //console.log("107 guesses: " + guesses.length)
+                 console.log("108 status.guesses " + status.guesses.length)
                 return res.render('game', {guesses: guesses, game: inGame, word: hiddenWord, message: message})
-            //  }
-
-
-
             }
         }
     }
-    //guesses = status.guesses
     return res.render('game', {guesses: guesses, game: inGame, word: hiddenWord, message: message})
     updateState(req)
   }
 
-
-  //if guesses left = 0, game over
   message = "Sorry, you lose."
   inGame = false
   hiddenWord = word
@@ -151,33 +128,14 @@ router.post('/again', function (req, res) {
 
   let i = Math.floor(Math.random() * mysteryWord.length)
   word = mysteryWord.new(i)
-  console.log ("new word? " + word)
   status.hiddenWord = []
-  console.log(" nOW OW NWO leters guseed: " + status.lettersGuessed )
-  console.log("665: " + status.hiddenWord)
-  console.log("666: " + status.newHidden(word)) /** NOT WORKING **/
   hiddenWord = status.newHidden(word)
-  console.log("new hidden word: " + hiddenWord) /** NOT WORKING **/
-
   inGame = true
-  guesses = ["guess", "guess","guess","guess","guess","guess","guess","guess"],
+  guesses = status.guesses = ["guess", "guess","guess","guess","guess","guess","guess","guess"]
+  console.log("Guesses at start of new game: " + guesses.length)
   message = ""
-
-
-  //console.log("rand number 2 : " + i)
   updateState(req)
-
-
-  //hiddenWord = status.newHidden(word)
-  console.log("new guesses: " + guesses)
-  console.log("new letters guessed: " + status.lettersGuessed)
-
   res.render('game', {word: hiddenWord, guesses: guesses, game: inGame, message: message})
-  //res.render('game')
 })
-
-
-
-
 
 module.exports = router
