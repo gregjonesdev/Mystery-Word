@@ -22,7 +22,6 @@ app.use(session({
   mysteryWord: undefined,
   guesses: undefined,
   lettersGuessed: undefined
-  //guess: undefined
 }))
 
 
@@ -31,7 +30,7 @@ app.use(session({
 app.get('/', function(req, res) {
 app.use('/game', gameRouter)
 app.post('/guess', gameRouter)
-app.post('/quit', gameRouter)
+app.post('/again', gameRouter)
 
 
 console.log("Router checkpoint 1: " + req.params)

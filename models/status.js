@@ -6,11 +6,15 @@ let lettersGuessed = []
 let hiddenWord = []
 
 const newHidden = function(word) {
-  if (hiddenWord.length===0) {
+ hiddenWord = []
+ lettersGuessed = []
+  console.log("From inside newHidden:  word: " + word)
+  console.log("From inside newHidden:  hiddenWord: " + hiddenWord)
+  //if (hiddenWord.length===0) {
     for (i=0; i<word.length; i++) {
-      hiddenWord.push("")
+      hiddenWord[i]=""
     }
-  }
+  //}
   return hiddenWord
 }
 

@@ -6,9 +6,15 @@ const expressValidator = require('express-validator')
 const status = require('../models/status.js')
 const mysteryWord = require('../models/words.js')
 
+//const fs = require('fs')
+
+
+//const allWords = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n")
+
 
 let word //the mysteryword
 let guesses
+let lettersGuessed
 let hiddenWord //the blanks that will reveal if a guess is a match
 let inGame = [true] //to hide the guess form when game is over
 //let winMessage //will stay undefined until a win
@@ -20,6 +26,7 @@ const updateState = function(request) {
   request.session.hiddenWord = hiddenWord
   request.session.inGame = inGame
   request.session.message = message
+  request.session.lettersGuessed = lettersGuessed
 }
 
 
@@ -38,11 +45,17 @@ router.use(function(req, res, next){
   }
 
   /* At this point, assign a mystery word to guess */
+  if (!word) {
+    let i = Math.floor(Math.random() * mysteryWord.length)
+    console.log("rand number 1 : " + i)
 
-  word = mysteryWord.new
-  console.log(word + " just assigned as mystery word")
+    word = mysteryWord.new(i)
+    console.log(word + " just assigned as mystery word")
+    hiddenWord = status.newHidden(word) //try add in this and the next line
+    console.log("new hidden word: " + hiddenWord)
+  }
   guesses = status.guesses
-  hiddenWord = status.newHidden(word) //takes mystery word, creates an array of empty strings with same length
+  //hiddenWord = status.newHidden(word) //takes mystery word, creates an array of empty strings with same length
   console.log("new hidden word: " + hiddenWord)
   updateState(req)
   //req.session.mysteryWord = word
@@ -63,7 +76,7 @@ let error = false
 let message = ""
 
 router.post('/guess', function(req, res){
-  
+
   if (guesses.length > 1) {
     req.checkBody("guess", 'Dont forget to guess a letter!').notEmpty()
     error = req.validationErrors()
@@ -134,7 +147,34 @@ router.post('/guess', function(req, res){
   return res.render('game', {word: hiddenWord, game: inGame, message: message})
 })
 
+router.post('/again', function (req, res) {
 
+  let i = Math.floor(Math.random() * mysteryWord.length)
+  word = mysteryWord.new(i)
+  console.log ("new word? " + word)
+  status.hiddenWord = []
+  console.log(" nOW OW NWO leters guseed: " + status.lettersGuessed )
+  console.log("665: " + status.hiddenWord)
+  console.log("666: " + status.newHidden(word)) /** NOT WORKING **/
+  hiddenWord = status.newHidden(word)
+  console.log("new hidden word: " + hiddenWord) /** NOT WORKING **/
+
+  inGame = true
+  guesses = ["guess", "guess","guess","guess","guess","guess","guess","guess"],
+  message = ""
+
+
+  //console.log("rand number 2 : " + i)
+  updateState(req)
+
+
+  //hiddenWord = status.newHidden(word)
+  console.log("new guesses: " + guesses)
+  console.log("new letters guessed: " + status.lettersGuessed)
+
+  res.render('game', {word: hiddenWord, guesses: guesses, game: inGame, message: message})
+  //res.render('game')
+})
 
 
 
