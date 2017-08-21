@@ -8,7 +8,6 @@ h2 {
   text-align: left;
 }
 
-
 .letter {
   height: 20px;
   padding:3px;
@@ -53,21 +52,18 @@ h2 {
   margin: 1px;
 }
 
-
 #guessButton {
   width: 50px;
   height: 30px;
   margin-left: 5px;
   border-radius: 3px;
   font-size: 1.5em;
+  padding: 3px;
 }
 
 .gone {
   background-color: white;
-
 }
-
-
 
 .word {
   width: 100%;
@@ -76,10 +72,8 @@ h2 {
   justify-content: center;
 }
 
-
 #startButton {
   width: 150px;
-
   height: 65px;
   border-radius: 3px;
   font-size: 1.5em;

@@ -25,7 +25,6 @@ app.use('/game', gameRouter)
 app.post('/guess', gameRouter)
 app.post('/again', gameRouter)
 
-/* If session exists, go right to the game */
 if(req.session.secret) {
   return res.redirect('/game')
   }
