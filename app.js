@@ -20,10 +20,11 @@ app.use(session({
   lettersGuessed: undefined
 }))
 
-app.get('/', function(req, res) {
 app.use('/game', gameRouter)
 app.post('/guess', gameRouter)
 app.post('/again', gameRouter)
+
+app.get('/', function(req, res) {
 
 if(req.session.secret) {
   return res.redirect('/game')
