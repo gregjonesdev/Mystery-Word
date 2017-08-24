@@ -17,6 +17,8 @@
     "express-session": "^1.15.3",
     "express-validator": "^3.2.0",
     "mustache": "^2.3.0",
-    "mustache-express": "^1.2.5"
+    "mustache-express": "^1.2.5",
+    "word-list-google": "^1.0.1",
+    "word-list-json": "^0.2.0"
   }
 }
