@@ -36,7 +36,5 @@ app.post('/launch', function (req, res){
   req.session.secret = "password2"
   res.redirect('/game')
 })
-
-app.listen(3000, function(){
-  console.log("10-2 on Port 3000")
-})
+const port = process.env.port || 3000
+app.listen(port)
