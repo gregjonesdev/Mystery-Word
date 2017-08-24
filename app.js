@@ -23,7 +23,6 @@ app.use(session({
 app.use('/game', gameRouter)
 app.post('/guess', gameRouter)
 app.post('/again', gameRouter)
-
 app.get('/', function(req, res) {
 
 if(req.session.secret) {
@@ -36,5 +35,6 @@ app.post('/launch', function (req, res){
   req.session.secret = "password2"
   res.redirect('/game')
 })
-const port = process.env.port || 3000
+
+const port = process.env.PORT || 5000;
 app.listen(port)
