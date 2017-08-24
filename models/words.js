@@ -9,7 +9,6 @@ for(i=0; i<1000; i++) {
   }
 }
 
-console.log(words)
 //const allWords = fs.readFileSync(wordlist, "utf-8").toLowerCase().split("\n")
 let mysteryWord = function (i) {
   return words[i]
@@ -17,5 +16,5 @@ let mysteryWord = function (i) {
 
 module.exports = {
   new: mysteryWord,
-  length: allWords.length
+  length: words.length
 }
