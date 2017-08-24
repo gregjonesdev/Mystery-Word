@@ -1,4 +1,3 @@
-const fs = require('fs')
 
 let allWords = require('word-list-google')
 let words = []
@@ -9,7 +8,6 @@ for(i=0; i<1000; i++) {
   }
 }
 
-//const allWords = fs.readFileSync(wordlist, "utf-8").toLowerCase().split("\n")
 let mysteryWord = function (i) {
   return words[i]
 }
